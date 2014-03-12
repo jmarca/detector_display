@@ -25,6 +25,31 @@ downstream milepost b |       |     |     |   ...
 
 ~~~
 
+# testing and running configuration
+
+to test this stuff, you need to have a file called test.config.json in
+the root directory that looks like:
+
+``` json
+{
+    "postgresql":{
+        "auth":{
+            "username":"...",
+            "password":"..."
+        },
+        "host":"127.0.0.1",
+        "port":5432,
+        "db":"dbname"
+    }
+}
+```
+
+at the moment, the exact same thing should be in config.json
+
+both of these files need to be chmod 0600 (read/write only by the owner)
+
+# notes and thoughts as I develop this
+
 Use the "milepost" to establish visually the separation of the
 segment?  Regardless, order all possible up and downstream mileposts
 by abs_pm.
