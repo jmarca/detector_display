@@ -38,7 +38,9 @@ describe('get daily from postgresql',function(){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
+                            r.should.have.property('components')
                             r.features.should.have.lengthOf(365  +366 + 365)
+                            r.components.should.have.lengthOf(4)
                             return done()
                         })
         return null
@@ -71,7 +73,9 @@ describe('get daily from postgresql',function(){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
+                            r.should.have.property('components')
                             r.features.should.have.lengthOf(365  +366 + 365)
+                            r.components.should.have.lengthOf(4)
                             return done()
                         })
         return null
@@ -105,7 +109,9 @@ describe('get daily from postgresql',function(){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
+                            r.should.have.property('components')
                             r.features.should.have.lengthOf(365  +366 + 365)
+                            r.components.should.have.lengthOf(5)
                             return done()
                         })
         return null
