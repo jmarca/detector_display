@@ -25,7 +25,9 @@
   "dependencies": {
     "config_okay": "0.0.2",
     "pg": "~2.11.1",
-    "async": "~0.2.10"
+    "async": "~0.2.10",
+    "couchdb_get_views": "jmarca/couchdb_get_views",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "should": "~3.1.3"
