@@ -76,7 +76,6 @@ describe('get daily from postgresql',function(){
                             r.should.have.property('components')
                             r.features.should.have.lengthOf(365  +366 + 365)
                             r.components.should.have.lengthOf(4)
-                            console.log(r.components)
                             return done()
                         })
         return null
@@ -113,7 +112,6 @@ describe('get daily from postgresql',function(){
                             r.should.have.property('components')
                             r.features.should.have.lengthOf(365  +366 + 365)
                             r.components.should.have.lengthOf(5)
-                            console.log(r.components)
                             return done()
                         })
         return null
