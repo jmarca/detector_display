@@ -31,6 +31,22 @@ var formatTOD = function(d){
 var nestByDate = d3.nest()
                  .key(function(d) { return d3.time.day(d.date); });
 
+function correct_detector_ids(id,direction){
+    if(!direction){
+
+        throw new Error('direction required')
+
+    }
+    var match = /wimid_(\d*)/.exec(id)
+    if(match && match [1]){
+       return ["wim",match[1],direction].join('.')
+    }else{
+        // vds case
+        match = /(\d*)/.exec(id)
+        return match[1]
+    }
+
+}
 function data(doc){
     // doc has keys
     // [detector_id,direction,features,component_details]
@@ -41,12 +57,29 @@ function data(doc){
     var lookup = {}
 
     var records = doc.features
+    records = doc.features.map(function(v){
+                  var record = v
+                  record.direction = record.direction.substr(0,1).toUpperCase()
+                  record.upstream = correct_detector_ids(records.components[0]
+                                                        ,record.direction)
+                  record.downstream = correct_detector_ids(records.components[2]
+                                                          ,record.direction)
+                  record.detector = correct_detector_ids(records.components[1]
+                                                        ,record.direction)
+                  return record
+              })
+
 
     var charts = [
 
 
         barChart()
         .data(records)
+        .key('date')
+        .minvalue(function(d){
+
+            return doc.component_details[d.components[0]]
+        })
         .detectors(doc.component_details)
         .round(d3.time.day.round)
         .x(d3.time.scale()

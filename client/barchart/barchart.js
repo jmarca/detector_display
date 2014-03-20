@@ -12,10 +12,9 @@ function barChart() {
         yaxis = d3.svg.axis().orient("left"),
         brush = d3.svg.brush(),
         brushDirty,
-        dimension,
-        group,
-        sumgroup,
-        round,
+        data,
+        key,
+        value,
         xlabel,
         ylabel,
         formatNumber = d3.format(",d");
@@ -24,15 +23,14 @@ function barChart() {
         var width = x.range()[1],
             height = y.range()[0];
 
-        var groupall = group.all()
 
-        var minx=groupall[groupall.length-1].key
-          ,maxx=groupall[0].key
+        var minx=data[data.length-1][key]
+          ,maxx=data[0][key]
 
-        groupall.forEach(function(val,idx){
+        data.forEach(function(val,idx){
             if(val.value > 0){
-                minx = val.key < minx ? val.key : minx
-                maxx = val.key > maxx ? val.key : maxx
+                minx = val[key] < minx ? val[key] : minx
+                maxx = val[key] > maxx ? val[key] : maxx
             }
         });
 
@@ -169,7 +167,7 @@ function barChart() {
                 d;
             while (++i < n) {
                 d = groups[i];
-                path.push("M", x(d.key), ",", height, "V", y(d.value), "h",barWidth,"V", height);
+                path.push("M", x(d[key]), ",", height, "V", y(d.value), "h",barWidth,"V", height);
             }
             return path.join("");
         }
@@ -241,43 +239,28 @@ function barChart() {
       if (!arguments.length) return y;
       y = _;
       return chart;
-  };
+    };
 
-    chart.dimension = function(_) {
-                          if (!arguments.length) return dimension;
-                          dimension = _;
+    chart.data = function(_) {
+                          if (!arguments.length) return data;
+                          data = _;
                           return chart;
                       };
 
-    chart.filter = function(_) {
-      if (_) {
-        brush.extent(_);
-        dimension.filterRange(_);
-      } else {
-        brush.clear();
-        dimension.filterAll();
-      }
-      brushDirty = true;
-      return chart;
-    };
+    // which field is the key, or x value
+    chart.key = function(_) {
+                          if (!arguments.length) return key;
+                          key = _;
+                          return chart;
+                      };
 
-    chart.group = function(_) {
-      if (!arguments.length) return group;
-      group = _;
-      return chart;
-    };
+    // which field is the value, or y value in the chart
+    chart.value = function(_) {
+                          if (!arguments.length) return value;
+                          value = _;
+                          return chart;
+                      };
 
-    chart.sumgroup = function(_) {
-      if (!arguments.length) return sumgroup;
-      sumgroup = _;
-      return chart;
-    };
-
-    chart.round = function(_) {
-      if (!arguments.length) return round;
-      round = _;
-      return chart;
-    };
     chart.xlabel = function(_) {
         if (!arguments.length) return xlabel;
         xlabel = _;
