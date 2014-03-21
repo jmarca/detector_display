@@ -28,16 +28,17 @@ function barChart() {
 
         var minx=data[data.length-1][key]
           ,maxx=data[0][key]
-          ,miny=minvalue(data[data.length-1])
+          ,miny=minvalue(data[0])
           ,maxy=maxvalue(data[0])
 
         data.forEach(function(val,idx){
+            val.min = minvalue(val)
+            val.max = maxvalue(val)
             minx = val[key] < minx ? val[key] : minx
             maxx = val[key] > maxx ? val[key] : maxx
-            miny = minvalue(val) < miny ? minvalue(val) : miny
-            maxy = maxvalue(val) > maxy ? maxvalue(val) : maxy
+            miny = val.min < miny ? val.min : miny
+            maxy = val.max > maxy ? val.max : maxy
         });
-
 
         y.domain([miny,maxy]);
         x.domain([minx,maxx])
@@ -152,15 +153,11 @@ function barChart() {
             var barWidth = width/(2*n)
             var d
 
-            console.log(n)
-            console.log(width)
-            console.log(barWidth)
             while (++i < n) {
                 d = groups[i];
-                path.push("M", x(d[key]), ",", height, "V", maxvalue(d), "h",barWidth,"V", height)
+                path.push("M", x(d[key]), ",", y(d.min), "V", y(d.max), "h",barWidth,"V", y(d.min))
                 // path.push("M", x(d[key]), ",", minvalue(d), "V", maxvalue(d), "h",barWidth,"V", minvalue(d))
             }
-            console.log(path.join(""))
             return path.join("");
         }
 
