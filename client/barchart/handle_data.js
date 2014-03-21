@@ -1,6 +1,4 @@
 var d3 = require('d3')
-var crossfilter = require('./crossfilter').crossfilter
-
 var barChart = require('./barchart')
 // date looks like "2007-01-04 16:00"
 var ts_regex=/(\d*-\d*-\d*)\s(\d*:\d*)/
@@ -32,17 +30,19 @@ var nestByDate = d3.nest()
                  .key(function(d) { return d3.time.day(d.date); });
 
 function correct_detector_ids(id,direction){
-    if(!direction){
-
-        throw new Error('direction required')
-
+    if(!id){
+        return null
     }
-    var match = /wimid_(\d*)/.exec(id)
+    if(!direction){
+        throw new Error('direction required')
+    }
+    var match = /wimid_(\d{1,3})/.exec(id)
     if(match && match [1]){
        return ["wim",match[1],direction].join('.')
     }else{
         // vds case
-        match = /(\d*)/.exec(id)
+        match = /(\d{5,7})/.exec(id)
+        //console.log(match[0],match[1])
         return match[1]
     }
 
@@ -55,20 +55,24 @@ function data(doc){
     //
 
     var lookup = {}
-
     var records = doc.features
     records = doc.features.map(function(v){
                   var record = v
                   record.direction = record.direction.substr(0,1).toUpperCase()
-                  record.upstream = correct_detector_ids(records.components[0]
+                  record.upstream = correct_detector_ids(record.components[0]
                                                         ,record.direction)
-                  record.downstream = correct_detector_ids(records.components[2]
+                  record.downstream = correct_detector_ids(record.components[2]
                                                           ,record.direction)
-                  record.detector = correct_detector_ids(records.components[1]
+                  record.detector = correct_detector_ids(record.components[1]
                                                         ,record.direction)
+                  record.date=new Date(record.date)
                   return record
               })
-
+    var details = {}
+    doc.component_details.forEach(function(v){
+        details[v.detector]=v
+        return null
+    })
 
     var charts = [
 
@@ -77,11 +81,22 @@ function data(doc){
         .data(records)
         .key('date')
         .minvalue(function(d){
-
-            return doc.component_details[d.components[0]]
+            if(d.upstream){
+                return details[d.upstream].abs_pm
+            }
+            return details[d.detector].abs_pm-0.25 // cheat back quarter mile
         })
-        .detectors(doc.component_details)
-        .round(d3.time.day.round)
+        .maxvalue(function(d){
+            if(d.downstream){
+                return details[d.downstream].abs_pm
+            }
+            return details[d.detector].abs_pm+0.25 // cheat forward quarter mile
+        })
+        .value(function(d){
+            return details[d.detector].abs_pm
+        })
+        //.detectors(details)
+        //.round(d3.time.day.round)
         .x(d3.time.scale()
            .rangeRound([0, 10 * 90]))
 
@@ -114,7 +129,7 @@ function data(doc){
     // Whenever the brush moves, re-rendering everything.
     function renderAll() {
         chart.each(render);
-        d3.select("#active").text(formatNumber(all.value()));
+        //d3.select("#active").text(formatNumber(all.value()));
     }
 
     window.renderAll = renderAll

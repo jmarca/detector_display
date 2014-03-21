@@ -14,6 +14,8 @@ function barChart() {
         brushDirty,
         data,
         key,
+        minvalue,
+        maxvalue,
         value,
         xlabel,
         ylabel,
@@ -26,15 +28,18 @@ function barChart() {
 
         var minx=data[data.length-1][key]
           ,maxx=data[0][key]
+          ,miny=minvalue(data[data.length-1])
+          ,maxy=maxvalue(data[0])
 
         data.forEach(function(val,idx){
-            if(val.value > 0){
-                minx = val[key] < minx ? val[key] : minx
-                maxx = val[key] > maxx ? val[key] : maxx
-            }
+            minx = val[key] < minx ? val[key] : minx
+            maxx = val[key] > maxx ? val[key] : maxx
+            miny = minvalue(val) < miny ? minvalue(val) : miny
+            maxy = maxvalue(val) > maxy ? maxvalue(val) : maxy
         });
 
-        y.domain([0, group.top(1)[0].value]);
+
+        y.domain([miny,maxy]);
         x.domain([minx,maxx])
 
         axis.scale(x);
@@ -55,19 +60,6 @@ function barChart() {
                 .text("reset")
                 .style("display", "none");
 
-                if(sumgroup){
-                    //var sums = sumgroup.all()
-
-                    div.select(".total").append("span")
-                    .attr("class","value")
-                    .text(formatNumber(Math.floor(sumgroup.value())))
-                    // console.log('reduce way'+
-                    //             sums.reduce(function(memo,item,idx,arr){
-                    //                 return memo + item.value;
-                    //             },0)
-                    //            )
-
-                }
                 g = div.append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
@@ -84,7 +76,7 @@ function barChart() {
                 .data(["background", "foreground"])
                 .enter().append("path")
                 .attr("class", function(d) { return d + " bar"; })
-                .datum(group.all());
+                .datum(data);
 
                 g.selectAll(".foreground.bar")
                 .attr("clip-path", "url(#clip-" + id + ")");
@@ -131,12 +123,6 @@ function barChart() {
                 g.select("g.y.axis")
                 .call(yaxis);
 
-                if(sumgroup){
-                    // recalculate the summation
-                    div.select(".total>.value")
-                    .text(formatNumber(Math.floor(sumgroup.value())))
-                }
-
             }
 
             // Only redraw the brush if set externally.
@@ -160,15 +146,21 @@ function barChart() {
         });
 
         function barPath(groups) {
-            var path = [],
-                i = -1,
-                n = groups.length,
-                barWidth = n/width,
-                d;
+            var path = []
+            var i = -1
+            var n = groups.length
+            var barWidth = width/(2*n)
+            var d
+
+            console.log(n)
+            console.log(width)
+            console.log(barWidth)
             while (++i < n) {
                 d = groups[i];
-                path.push("M", x(d[key]), ",", height, "V", y(d.value), "h",barWidth,"V", height);
+                path.push("M", x(d[key]), ",", height, "V", maxvalue(d), "h",barWidth,"V", height)
+                // path.push("M", x(d[key]), ",", minvalue(d), "V", maxvalue(d), "h",barWidth,"V", minvalue(d))
             }
+            console.log(path.join(""))
             return path.join("");
         }
 
@@ -187,39 +179,6 @@ function barChart() {
                  + "V" + (2 * y - 8);
         }
     }
-
-    brush.on("brushstart.chart", function() {
-        var div = d3.select(this.parentNode.parentNode.parentNode);
-        div.select(".title a").style("display", null);
-    });
-
-    brush.on("brush.chart", function() {
-        var g = d3.select(this.parentNode),
-            extent = brush.extent();
-        if (round) g.select(".brush")
-                   .call(brush.extent(extent = extent.map(round)))
-                   .selectAll(".resize")
-                   .style("display", null);
-        g.select("#clip-" + id + " rect")
-        .attr("x", x(extent[0]))
-        .attr("width", x(extent[1]) - x(extent[0]));
-        dimension.filterRange(extent);
-    });
-
-    brush.on("brushend.chart", function() {
-                                     if (brush.empty()) {
-                                         var div = d3.select(this.parentNode.parentNode.parentNode);
-                                         div.select(".title a").style("display", "none");
-                                         div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
-                                         dimension.filterAll();
-                                     }
-                                 });
-
-    chart.margin = function(_) {
-    if (!arguments.length) return margin;
-    margin = _;
-    return chart;
-};
 
     chart.x = function(_) {
                         if (!arguments.length) return x;
@@ -254,7 +213,21 @@ function barChart() {
                           return chart;
                       };
 
-    // which field is the value, or y value in the chart
+    // assign callback to minvalue, or minvalue, or field.
+    chart.minvalue = function(_) {
+                          if (!arguments.length) return minvalue;
+                          minvalue = _;
+                          return chart;
+                      };
+
+    // assign callback to maxvalue, or maxvalue, or field.
+    chart.maxvalue = function(_) {
+                          if (!arguments.length) return maxvalue;
+                          maxvalue = _;
+                          return chart;
+                      };
+
+    // assign callback to value, or value, or field.
     chart.value = function(_) {
                           if (!arguments.length) return value;
                           value = _;

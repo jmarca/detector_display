@@ -1,4 +1,4 @@
-var data = {"detector_id":"wimid_82",
+module.exports= {"detector_id":"wimid_82",
             "direction":"east",
             "features":[{"components":[null,
                                        "wimid_82",
