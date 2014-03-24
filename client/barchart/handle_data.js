@@ -74,6 +74,7 @@ function data(doc){
         return null
     })
 
+    var detector_abspm = details[records[0].detector].abs_pm
     var charts = [
 
 
@@ -82,15 +83,16 @@ function data(doc){
         .key('date')
         .minvalue(function(d){
             if(d.upstream){
-                return details[d.upstream].abs_pm
+                return detector_abspm + (details[d.upstream].abs_pm - detector_abspm)/2
             }
-            return details[d.detector].abs_pm-0.25 // cheat back quarter mile
+            return detector_abspm-0.25 // cheat back quarter mile
         })
         .maxvalue(function(d){
+
             if(d.downstream){
-                return details[d.downstream].abs_pm
+                return detector_abspm + (details[d.downstream].abs_pm - detector_abspm)/2
             }
-            return details[d.detector].abs_pm+0.25 // cheat forward quarter mile
+            return detector_abspm+0.25 // cheat forward quarter mile
         })
         .value(function(d){
             return details[d.detector].abs_pm

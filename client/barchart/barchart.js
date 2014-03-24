@@ -34,6 +34,8 @@ function barChart() {
         data.forEach(function(val,idx){
             val.min = minvalue(val)
             val.max = maxvalue(val)
+            var min = val.min > val.max ? val.max : val.min
+            var max = val.min > val.max ? val.min : val.max
             minx = val[key] < minx ? val[key] : minx
             maxx = val[key] > maxx ? val[key] : maxx
             miny = val.min < miny ? val.min : miny
@@ -150,7 +152,7 @@ function barChart() {
             var path = []
             var i = -1
             var n = groups.length
-            var barWidth = width/(2*n)
+            var barWidth = width/(1.5*n)
             var d
 
             while (++i < n) {
