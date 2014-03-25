@@ -30,7 +30,11 @@ function barChart() {
           ,maxx=data[0][key]
           ,miny=minvalue(data[0])
           ,maxy=maxvalue(data[0])
-
+        if(miny>maxy){
+            var t = maxy
+            maxy=miny
+            miny=t
+        }
         data.forEach(function(val,idx){
             val.min = minvalue(val)
             val.max = maxvalue(val)

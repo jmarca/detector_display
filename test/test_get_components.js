@@ -13,8 +13,8 @@ describe('get data from psql and couchdb for displayl',function(){
 
         async.waterfall([function(cb){
                              var c={}
-                             c.detector_id='wimid_82'
-                             c.direction='east'
+                             c.detector_id='wim.82.E'
+                             //c.direction='east'
                              c.config_file = rootdir+'/../test.config.json'
                              return cb(null,c)
                          }

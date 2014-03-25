@@ -2,8 +2,7 @@
 // a small server to run while testing the UI
 
 var express = require('express')
-var data = require('./.').detector_details
-var county_detectors_service=require('county_detector_collation')
+
 var app = express()
           .use(express.logger())
 var app,server
@@ -11,17 +10,24 @@ var env = process.env;
 var testhost = env.TEST_HOST || '127.0.0.1'
 var testport = env.TEST_PORT || 3000
 
+var data = require('./server/app')
+
 var path = require('path')
 var rootdir = path.normalize(__dirname)
 
+var config_file = rootdir+'/test.config.json'
+var config_okay=require('config_okay')
 
 
-data(app)
-county_detectors_service(app,'/county/detectors',rootdir+'/config.json')
+config_okay(config_file,function(err,c){
+            app = express()
+                  .use(express.logger())
 
-app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
-app.use(express.static('public'))
+            data(c)(app)
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
+    app.use(express.static('public'))
 
-app.listen(testport,testhost,function(){
-    console.log('server listening on host: '+testhost+':'+testport)
+    app.listen(testport,testhost,function(){
+        console.log('server listening on host: '+testhost+':'+testport)
+    })
 })

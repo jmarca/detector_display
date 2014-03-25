@@ -68,11 +68,9 @@ function data(doc){
                   record.date=new Date(record.date)
                   return record
               })
-    var details = {}
-    doc.component_details.forEach(function(v){
-        details[v.detector]=v
-        return null
-    })
+    console.log(Object.keys(doc))
+    var details = doc.component_details
+
 
     var detector_abspm = details[records[0].detector].abs_pm
     var charts = [
@@ -82,14 +80,14 @@ function data(doc){
         .data(records)
         .key('date')
         .minvalue(function(d){
-            if(d.upstream){
+            if(d.upstream && details[d.upstream]){
                 return detector_abspm + (details[d.upstream].abs_pm - detector_abspm)/2
             }
             return detector_abspm-0.25 // cheat back quarter mile
         })
         .maxvalue(function(d){
 
-            if(d.downstream){
+            if(d.downstream && details[d.downstream]){
                 return detector_abspm + (details[d.downstream].abs_pm - detector_abspm)/2
             }
             return detector_abspm+0.25 // cheat forward quarter mile

@@ -15,24 +15,20 @@ function _handler(config){
     var vdsre = /(\d{5,7})/;
 
     return function(app){
-               // add year eventually
-               app.get('/detector/:id.:format',function(req,res,next){
-                   console.log(['handling data query, with ', req.params])
-                   var c = _.clone(config)
-                   var result = wimre.exec(req.params.id)
-                   if(result && result[1]){
-                       // working on a wim detector
-                       c.detector_id='wimid_'+result[1]
-                       c.direction = result[2]
-                       return detector_display.fetch(c,function(e,r){
-                                  if(e) return next(e)
-                                  res.json(r)
-                                  res.end()
-                                  return null
-                              })
-                   }
-                   return null
-               })
-               return app
-           }
+        // add year eventually
+        app.get('/detector/:id.:format',function(req,res,next){
+            console.log(['handling data query, with ', req.params])
+            var c = _.clone(config)
+            c.detector_id=req.params.id
+            return detector_display.fetch(c,function(e,r){
+                       if(e) return next(e)
+                       res.json(r)
+                       res.end()
+                       return null
+                   })
+        })
+
+        return null
+
+    }
 }
