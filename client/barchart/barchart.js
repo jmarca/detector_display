@@ -6,7 +6,7 @@ function barChart() {
 
     var margin = {top: 10, right: 10, bottom: 70, left: 160},
         x,
-        y = d3.scale.linear().range([100, 0]),
+        y = d3.scale.linear().range([300, 0]),
         id = barChart.id++,
         axis = d3.svg.axis().orient("bottom"),
         yaxis = d3.svg.axis().orient("left"),
@@ -19,6 +19,7 @@ function barChart() {
         value,
         xlabel,
         ylabel,
+        yextras,
         formatNumber = d3.format(",d");
 
     function chart(div) {
@@ -93,6 +94,25 @@ function barChart() {
                 .attr("transform", "translate(0,0)")
                 .call(yaxis);
 
+                if(yextras){
+                    g.append('g')
+                    .selectAll(".detector")
+                    .data(yextras)
+                    .enter().append('g')
+                    .attr('class', 'y axis label detector')
+                    .attr('transform', function(d){
+                        return 'translate('+(-margin.left/3)+','+ y(d.abs_pm)+')'
+                    })
+                    .append('svg:text')
+                    .style('stroke','none')
+                    .text(function(d){
+                        return d.id
+                    })
+                    .attr('text-anchor','end')
+                    //.attr('transform','rotate(-10)')
+
+
+                }
                 if(xlabel){
                     g.append('g')
                     .attr('class', 'x axis label')
@@ -106,11 +126,17 @@ function barChart() {
                 if(ylabel){
                     g.append('g')
                     .attr('class', 'y axis label')
-                    .attr('transform', 'translate('+(-margin.left/2)+',' + (height/2) + ') rotate(-90)')
+                    .attr('transform', 'translate(-42,' + (height/2) + ') rotate(-90)')
                     .append('svg:text')
                     .style('stroke','none')
                     .attr('text-anchor', 'middle')
-                    .text(ylabel);
+                    .text(function(d){
+                        var t = 'absolute milepost'
+                        if(yextras){
+                            t = yextras[0].freeway + ' freeway, '+t
+                        }
+                        return t
+                    });
 
                 }
                 // Initialize the brush component with pretty resize handles.
@@ -241,6 +267,12 @@ function barChart() {
     chart.ylabel = function(_) {
         if (!arguments.length) return ylabel;
         ylabel = _;
+        return chart;
+    };
+
+    chart.yextras = function(_) {
+        if (!arguments.length) return yextras;
+        yextras = _;
         return chart;
     };
 

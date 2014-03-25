@@ -69,7 +69,6 @@ function data(doc){
                   record.date=new Date(record.date)
                   return record
               })
-    console.log(_.keys(doc))
 
     var components = doc.components
     // once in a while components is null.  That is a bug on the
@@ -81,7 +80,17 @@ function data(doc){
         baseline = components[i]
     }
 
-    var details = doc.component_details
+    var details = {}
+    _.forEach(doc.component_details,function(v,k){
+        if(v){
+            details[k]=v
+            details[k].id=k
+            return null
+        }
+        //console.log('failed on key '+k)
+        //console.log(JSON.stringify(v))
+        return null
+    })
 
     var minmax = _.reduce(details
                          ,function(mm,record){
@@ -98,9 +107,7 @@ function data(doc){
                           ,max:details[baseline].abs_pm}
                          )
 
-    console.log(JSON.stringify(records[0]))
     var detector_abspm = details[records[0].detector].abs_pm
-    console.log(detector_abspm)
 
     var charts = [
 
@@ -131,6 +138,9 @@ function data(doc){
         .value(function(d){
             return details[d.detector].abs_pm
         })
+        .xlabel('time')
+        .ylabel('milepost')
+        .yextras(_.values(details))
         //.detectors(details)
         //.round(d3.time.day.round)
         .x(d3.time.scale()
