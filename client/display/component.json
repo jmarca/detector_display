@@ -1,6 +1,6 @@
 {
-  "name": "detector_display",
-  "repo": "jmarca/detector_display",
+  "name": "detector_milepost_display",
+  "repo": "jmarca/detector_milepost_display",
   "description": "display and plot detector data, using d3, etc",
   "version": "0.0.1",
   "keywords": [],
@@ -11,7 +11,7 @@
   },
   "development": {},
   "license": "MIT",
-  "main": "detector_display.js",
+  "main": "display.js",
   "local": [
     "barchart"
   ],
@@ -19,7 +19,8 @@
     ".."
   ],
   "scripts": [
-    "detector_display.js"
+    "display.js",
+    "fetch.js"
   ],
   "styles": [
     "detector_display.css"

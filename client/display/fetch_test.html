@@ -17,7 +17,8 @@
       <div class='plots'>
         <div id="charts">
           <div id="date-chart" class="bar chart">
-            <div class="title">Count of observations (road type X hours) each day</div>
+            <div class="title">Effective section length, from upstream
+            to downstream detector, for each day with valid data</div>
           </div>
         </div>
       </div>
@@ -26,25 +27,8 @@
 
     <script src="build/build.js"></script>
     <script>
-       var fetch = require('detector_display');
-       var data_handler = require('barchart');
-       var dom = require('dom')
-       function handler(val){
-         fetch({'detector':val}
-              ,function(doc){
-                 console.log('got data with '+doc.features.length+' rows')
-                 data_handler(doc)
-         })
-       }
-       dom( "#formDetector" ).on('submit',function( event ){
-           event.preventDefault();
-           console.log('handling click')
-           var detector_id = dom( "#inputDetector" ).val();
-           console.log(detector_id)
-           handler(detector_id)
-           return null;
-       })
-
+      var display = require('detector_milepost_display')
+      display('#formDetector','#inputDetector','.chart')
     </script>
   </body>
 </html>

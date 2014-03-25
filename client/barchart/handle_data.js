@@ -48,7 +48,8 @@ function correct_detector_ids(id,direction){
     }
 
 }
-function data(doc){
+function data(doc,chart_class){
+    chart_class = chart_class || ".banana"
     // doc has keys
     // [detector_id,direction,features,component_details]
     // features is a list of records, each iwth keys:
@@ -156,7 +157,7 @@ function data(doc){
     d3.selectAll(".chart").selectAll("svg").remove()
     d3.selectAll(".chart").selectAll("g").remove()
     d3.selectAll(".chart").selectAll(".total > .value").remove()
-    var chart = d3.selectAll(".chart")
+    var chart = d3.selectAll(chart_class)
                 .data(charts)
                 .each(function(chart) {
                     if(chart.on !== undefined ){
