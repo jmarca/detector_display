@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "mbostock/d3": "*",
+    "lodash/lodash": "*",
     "visionmedia/superagent": "*"
   },
   "development": {},

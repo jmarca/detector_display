@@ -1,4 +1,5 @@
 var d3 = require('d3')
+var _  = require('lodash')
 var barChart = require('./barchart')
 // date looks like "2007-01-04 16:00"
 var ts_regex=/(\d*-\d*-\d*)\s(\d*:\d*)/
@@ -68,11 +69,39 @@ function data(doc){
                   record.date=new Date(record.date)
                   return record
               })
-    console.log(Object.keys(doc))
+    console.log(_.keys(doc))
+
+    var components = doc.components
+    // once in a while components is null.  That is a bug on the
+    // server, but let's not crash here because of it.
+    var baseline = components[0]
+    var i = 0
+    while(!baseline){
+        i++
+        baseline = components[i]
+    }
+
     var details = doc.component_details
 
+    var minmax = _.reduce(details
+                         ,function(mm,record){
+                              if(! record ){
+                                  return mm
+                              }
+                              mm.min = mm.min < record.abs_pm ?
+                                  mm.min : record.abs_pm
+                              mm.max = mm.max > record.abs_pm ?
+                                  mm.max : record.abs_pm
+                              return mm
+                          }
+                         ,{min:details[baseline].abs_pm
+                          ,max:details[baseline].abs_pm}
+                         )
 
+    console.log(JSON.stringify(records[0]))
     var detector_abspm = details[records[0].detector].abs_pm
+    console.log(detector_abspm)
+
     var charts = [
 
 
@@ -80,17 +109,24 @@ function data(doc){
         .data(records)
         .key('date')
         .minvalue(function(d){
-            if(d.upstream && details[d.upstream]){
-                return detector_abspm + (details[d.upstream].abs_pm - detector_abspm)/2
+            if(d){
+                if(d.upstream && details[d.upstream]){
+                    return detector_abspm + (details[d.upstream].abs_pm - detector_abspm)/2
+                }
+                return detector_abspm-0.25 // cheat back quarter mile
             }
-            return detector_abspm-0.25 // cheat back quarter mile
+            // not d, so use components
+            return minmax.min
         })
         .maxvalue(function(d){
-
-            if(d.downstream && details[d.downstream]){
-                return detector_abspm + (details[d.downstream].abs_pm - detector_abspm)/2
+            if(d){
+                if(d.downstream && details[d.downstream]){
+                    return detector_abspm + (details[d.downstream].abs_pm - detector_abspm)/2
+                }
+                return detector_abspm+0.25 // cheat forward quarter mile
             }
-            return detector_abspm+0.25 // cheat forward quarter mile
+            // not d, so use components
+            return minmax.max
         })
         .value(function(d){
             return details[d.detector].abs_pm
