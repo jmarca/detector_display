@@ -19,6 +19,17 @@ function(d){
 },
     formatTime = d3.time.format("%I:%M %p");
 
+var custom_time_format = d3.time.format.multi([
+    [".%L", function(d) { return d.getMilliseconds(); }],
+    [":%S", function(d) { return d.getSeconds(); }],
+    ["%I:%M", function(d) { return d.getMinutes(); }],
+    ["%I %p", function(d) { return d.getHours(); }],
+    ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+    ["%b %d", function(d) { return d.getDate() != 1; }],
+    ["%b %y", function(d) { return d.getMonth(); }],
+    ["%Y", function() { return true; }]
+]);
+
 var formatTOD = function(d){
     if (d===0) return '12:00 AM'
     if (d<12) return d+':00 AM'
@@ -146,6 +157,8 @@ function data(doc){
         //.round(d3.time.day.round)
         .x(d3.time.scale()
            .rangeRound([0, 10 * 90]))
+        .xTickFormat(custom_time_format)
+
 
     ];
 

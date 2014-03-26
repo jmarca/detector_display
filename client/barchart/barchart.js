@@ -18,6 +18,7 @@ function barChart() {
         maxvalue,
         value,
         xlabel,
+        xTickFormat,
         ylabel,
         yextras,
         click_handler,
@@ -46,6 +47,9 @@ function barChart() {
         x.domain([minx,maxx])
 
         axis.scale(x);
+        if(xTickFormat){
+            axis.tickFormat(xTickFormat)
+        }
         brush.x(x);
 
         yaxis.scale(y);
@@ -269,6 +273,12 @@ function barChart() {
     chart.xlabel = function(_) {
         if (!arguments.length) return xlabel;
         xlabel = _;
+        return chart;
+    };
+
+    chart.xTickFormat = function(_) {
+        if (!arguments.length) return xTickFormat;
+        xTickFormat = _;
         return chart;
     };
 
