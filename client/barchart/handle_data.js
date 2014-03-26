@@ -48,7 +48,7 @@ function correct_detector_ids(id,direction){
     }
 
 }
-function data(doc,chart_class){
+function data(doc){
     chart_class = chart_class || ".banana"
     // doc has keys
     // [detector_id,direction,features,component_details]
@@ -149,34 +149,72 @@ function data(doc,chart_class){
 
     ];
 
+    if(click_handler){
+        _.forEach(charts,function(chart){
+            return chart.click_handler(click_handler)
+        })
+    }
+
     // set up the time and day checkboxes
 
     // Given our array of charts, which we assume are in the same order as the
     // .chart elements in the DOM, bind the charts to the DOM and render them.
     // We also listen to the chart's brush events to update the display.
-    d3.selectAll(".chart").selectAll("svg").remove()
-    d3.selectAll(".chart").selectAll("g").remove()
-    d3.selectAll(".chart").selectAll(".total > .value").remove()
+
     var chart = d3.selectAll(chart_class)
-                .data(charts)
+                .data(charts, function(d) {return doc.detector })
+
                 .each(function(chart) {
                     if(chart.on !== undefined ){
                         chart.on("brush", renderAll).on("brushend", renderAll);
                     };
-                })
+                });
 
 
-    renderAll();
+        // 1. exit
+    var charts = d3.selectAll(chart_class)
+    var gs = charts.selectAll("g").transition()
+    var svgs = charts.selectAll("svg")
+                  .transition()
+
+    gs
+    .style("opacity", 0)
+    .remove();
+    gs.each('end',function(){
+        svgs
+        .style("opacity", 0)
+        .remove();
+    })
+
+
+    // enter
+    if(svgs.empty()){
+        chart.each(render)
+    }else{
+        // console.log('svg transition is not empty')
+        var enterTransition = svgs.each('end',function() {
+                                  chart.each(render)
+                                  .style("opacity", 0)
+                                  .transition()
+                                  .style("opacity", 1);
+                              });
+    }
+
+
+//    clear(renderAll);
+
+    //renderAll();
 
     // Renders the specified chart or list.
     function render(method) {
+        //console.log('rendering')
         d3.select(this).call(method);
     }
 
     // Whenever the brush moves, re-rendering everything.
     function renderAll() {
+        console.log('hello San Dimas')
         chart.each(render);
-        //d3.select("#active").text(formatNumber(all.value()));
     }
 
     window.renderAll = renderAll
@@ -192,5 +230,26 @@ function data(doc,chart_class){
 
 
     return null
+}
+
+var transition = d3.transition()
+                 .duration(750)
+                 .ease("linear");
+
+var chart_class = '.banana' //make sure setting is working right
+var click_handler;
+
+data.chart_class=function(_){
+    if (!arguments.length) return chart_class;
+    chart_class = _;
+    return data;
+}
+data.click_handler=function(_){
+    click_handler=_;
+    return data;
+}
+data.clear=function(){
+    clear()
+    return data
 }
 module.exports=data

@@ -122,3 +122,7 @@ path.xy {
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+.detector:hover,.detector:focus{
+	stroke:#2a6496;
+}

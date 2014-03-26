@@ -20,6 +20,7 @@ function barChart() {
         xlabel,
         ylabel,
         yextras,
+        click_handler,
         formatNumber = d3.format(",d");
 
     function chart(div) {
@@ -109,9 +110,17 @@ function barChart() {
                         return d.id
                     })
                     .attr('text-anchor','end')
+
                     //.attr('transform','rotate(-10)')
 
 
+                    if(click_handler){
+                        g.selectAll(".detector")
+                        .on('click',click_handler)
+                        .on('mouseover',function(){
+                            d3.select(this).attr("cursor","pointer")
+                        })
+                    }
                 }
                 if(xlabel){
                     g.append('g')
@@ -273,6 +282,11 @@ function barChart() {
     chart.yextras = function(_) {
         if (!arguments.length) return yextras;
         yextras = _;
+        return chart;
+    };
+    chart.click_handler = function(_) {
+        if (!arguments.length) return click_handler;
+        click_handler = _;
         return chart;
     };
 
