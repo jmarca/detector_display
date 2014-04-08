@@ -98,3 +98,11 @@ osm2=# select components, min(ts), max(ts) from tempseg2.detector_segment_condit
  {vdsid_1000110,vdsid_1000210,vdsid_1000310} | 2007-02-08 10:00:00 | 2009-12-31 13:00:00
 (2 rows)
 ```
+
+# updates
+
+One of the problems with the current UI is that the detectors are only
+relevant to the detector that is selected.  So you can't move up and
+down the postmiles along the freeway quite the way you think by just
+clicking.  It should be nice to see all detectors up and down within
+the min max of the postmiles shown on the axis.
