@@ -85,4 +85,37 @@ describe('get details on some detectors',function(){
                         })
         return null
     })
+
+})
+describe('hide passwords',function(done){
+    it('should not expose the original config object',function(done){
+
+        async.waterfall([function(cb){
+                             var config_file = rootdir+'/../test.config.json'
+
+                             config_okay(config_file,function(err,c){
+                                 if(!c.couchdb || ! c.couchdb.db){ throw new Error('need valid db defined in test.config.json under couchdb.db.  See the README for details')}
+                                 return cb(null,c)
+                             })
+                             return null
+                         }
+                        ,function(task,cb){
+                             task.detector='vdsid_100210'
+                             task.components=['1000410'
+                                             ,'1000110'
+                                             ,'1000210'
+                                             ,'1000310'
+                                            ]
+                             return cb(null,task)
+                         }
+                        ,get_components]
+                       ,function(e,r){
+                            should.not.exist(e)
+                            should.exist(r)
+                            r.should.not.have.property('couchdb')
+                            r.should.not.have.property('postgresql')
+                            return done()
+                        })
+        return null
+    })
 })
