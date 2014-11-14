@@ -1,3 +1,6 @@
 /test.config.json
 **/build
 **/components
+/config.json
+/node_modules/
+*~
