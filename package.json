@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/jmarca/detector_display",
   "dependencies": {
-    "config_okay": "0.0.2",
+    "config_okay": "",
     "pg": "~2.11.1",
     "async": "~0.2.10",
     "couchdb_get_views": "jmarca/couchdb_get_views",
-    "lodash": "~2.4.1"
+    "lodash": ""
   },
   "devDependencies": {
     "should": "~3.1.3",
