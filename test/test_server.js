@@ -46,9 +46,7 @@ after(function(done){
 })
 
 describe('data server',function(){
-    it('should serve Sonoma',function(done){
-        var areatype = 'county'
-        var areaname = 'Sonoma'
+    it('should serve wim.82.E',function(done){
         request.get(server_host+'/'+'detector/wim.82.E'+'.json'
                    ,function(e,r,b){
                         should.not.exist(e)
@@ -57,6 +55,7 @@ describe('data server',function(){
                         var doc = JSON.parse(b)
                         doc.should.have.property('features')
                         doc.should.have.property('components')
+                        doc.should.have.property('component_details')
 
                         var data_len = doc.features.length
                         data_len.should.eql(365+366+365)
@@ -70,6 +69,24 @@ describe('data server',function(){
                                                               )
                         return done()
                     })
+        return null
+    })
+})
+describe('hide passwords',function(done){
+    it('should not expose the original config object',function(done){
+        request.get(server_host+'/'+'detector/wim.82.E'+'.json'
+                   ,function(e,r,b){
+                        should.not.exist(e)
+                        should.exist(r)
+                        should.exist(b)
+                        var doc = JSON.parse(b)
+                        doc.should.have.property('features')
+                        doc.should.have.property('components')
+                        doc.should.have.property('component_details')
+                        doc.should.not.have.property('couchdb')
+                        doc.should.not.have.property('postgresql')
+                       return done()
+                   })
         return null
     })
 })

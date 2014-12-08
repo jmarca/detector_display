@@ -85,4 +85,5 @@ describe('get details on some detectors',function(){
                         })
         return null
     })
+
 })
