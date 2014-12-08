@@ -39,7 +39,7 @@ the root directory that looks like:
         },
         "host":"127.0.0.1",
         "port":5432,
-        "db":"dbname"
+        "detector_display_db":"dbname"
     }
 }
 ```

@@ -15,7 +15,7 @@ describe('get daily from postgresql',function(){
                              var config_file = rootdir+'/../test.config.json'
 
                              config_okay(config_file,function(err,c){
-                                 if(!c.postgresql || ! c.postgresql.db){ throw new Error('need valid db defined in test.config.json under postgresql.db.  See the README for details')}
+                                 if(!c.postgresql || ! c.postgresql.detector_display_db){ throw new Error('need valid db defined in test.config.json under postgresql.detector_display_db.  See the README for details')}
                                  c.detector_id='1000210'
                                  c.direction='S'
                                  return cb(null,c)
@@ -28,7 +28,7 @@ describe('get daily from postgresql',function(){
                                                    + task.postgresql.auth.password+"@"
                                                    + task.postgresql.host+":"
                                                    + task.postgresql.port+"/"
-                                                   + task.postgresql.db
+                                                   + task.postgresql.detector_display_db
                              pg.connect(connection_string
                                        ,component_query(task,cb)
                                        )
@@ -51,7 +51,7 @@ describe('get daily from postgresql',function(){
                              var config_file = rootdir+'/../test.config.json'
 
                              config_okay(config_file,function(err,c){
-                                 if(!c.postgresql || ! c.postgresql.db){ throw new Error('need valid db defined in test.config.json under postgresql.db.  See the README for details')}
+                                 if(!c.postgresql || ! c.postgresql.detector_display_db){ throw new Error('need valid db defined in test.config.json under postgresql.detector_display_db.  See the README for details')}
                                  c.detector_id='1000210'
                                  return cb(null,c)
                              })
@@ -63,7 +63,7 @@ describe('get daily from postgresql',function(){
                                                    + task.postgresql.auth.password+"@"
                                                    + task.postgresql.host+":"
                                                    + task.postgresql.port+"/"
-                                                   + task.postgresql.db
+                                                   + task.postgresql.detector_display_db
                              pg.connect(connection_string
                                        ,component_query(task,cb)
                                        )
@@ -86,7 +86,7 @@ describe('get daily from postgresql',function(){
                              var config_file = rootdir+'/../test.config.json'
 
                              config_okay(config_file,function(err,c){
-                                 if(!c.postgresql || ! c.postgresql.db){ throw new Error('need valid db defined in test.config.json under postgresql.db.  See the README for details')}
+                                 if(!c.postgresql || ! c.postgresql.detector_display_db){ throw new Error('need valid db defined in test.config.json under postgresql.detector_display_db.  See the README for details')}
                                  c.detector_id='wim.82'
                                  c.direction='E'
                                  return cb(null,c)
@@ -99,7 +99,7 @@ describe('get daily from postgresql',function(){
                                                    + task.postgresql.auth.password+"@"
                                                    + task.postgresql.host+":"
                                                    + task.postgresql.port+"/"
-                                                   + task.postgresql.db
+                                                   + task.postgresql.detector_display_db
                              pg.connect(connection_string
                                        ,component_query(task,cb)
                                        )

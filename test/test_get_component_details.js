@@ -15,7 +15,7 @@ describe('get details on some detectors',function(){
                              var config_file = rootdir+'/../test.config.json'
 
                              config_okay(config_file,function(err,c){
-                                 if(!c.couchdb || ! c.couchdb.db){ throw new Error('need valid db defined in test.config.json under couchdb.db.  See the README for details')}
+                                 if(!c.couchdb || ! c.couchdb.detector_display_db){ throw new Error('need valid db defined in test.config.json under couchdb.detector_display_db.  See the README for details')}
                                  return cb(null,c)
                              })
                              return null
@@ -49,7 +49,7 @@ describe('get details on some detectors',function(){
                              var config_file = rootdir+'/../test.config.json'
 
                              config_okay(config_file,function(err,c){
-                                 if(!c.couchdb || ! c.couchdb.db){ throw new Error('need valid db defined in test.config.json under couchdb.db.  See the README for details')}
+                                 if(!c.couchdb || ! c.couchdb.detector_display_db){ throw new Error('need valid db defined in test.config.json under couchdb.detector_display_db.  See the README for details')}
                                  return cb(null,c)
                              })
                              return null
