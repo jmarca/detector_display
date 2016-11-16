@@ -68,7 +68,7 @@ describe('get details on some detectors',function(){
                             r.component_details.should.have.keys('wim.82.E')
                             r.component_details['wim.82.E'].should.be.ok
                             r.component_details['wim.82.E'].should.have.keys(
-                                ['loc'
+                                'loc'
                                 ,'wim_type'
                                 ,'cal_pm'
                                 ,'cal_pm_numeric'
@@ -78,7 +78,7 @@ describe('get details on some detectors',function(){
                                 ,'geojson'
                                 ,'lanes'
                                 ,'county'
-                                ,'abs_pm'])
+                                ,'abs_pm')
 
 
                             return done()

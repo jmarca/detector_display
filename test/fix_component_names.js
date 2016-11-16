@@ -34,12 +34,12 @@ describe('fix component names',function(){
     })
     it('should fix a whole set of components',function(done){
         var fixed = fix_component_names('south',['vdsid_1003510','vdsid_1003610','wimid_27'])
-        fixed.should.eql([1003510,1003610,'wim.27.S'])
+        fixed.should.eql(['1003510','1003610','wim.27.S'])
         return done()
     })
     it('should not choke on a null component',function(done){
         var fixed = fix_component_names('south',[null,'vdsid_1003610',null])
-        fixed.should.eql([null,1003610,null])
+        fixed.should.eql([null,'1003610',null])
         return done()
     })
 
