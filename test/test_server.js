@@ -31,7 +31,6 @@ before(
 
         config_okay(config_file,function(err,c){
             app = express()
-                  .use(express.logger())
 
             data(c)(app)
             server=http
@@ -58,12 +57,10 @@ describe('data server',function(){
                         doc.should.have.property('component_details')
 
                         var data_len = doc.features.length
-                        data_len.should.eql(365+366+365)
-                        doc.components.should.have.lengthOf(5)
+                        data_len.should.eql(365)
+                        doc.components.should.have.lengthOf(3)
 
-                        doc.component_details.should.have.keys('765486'
-                                                              ,'718469'
-                                                              ,'717692'
+                        doc.component_details.should.have.keys('772953'
                                                               ,'wim.82.E'
                                                               ,'716142'
                                                               )

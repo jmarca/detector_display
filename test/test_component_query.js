@@ -23,23 +23,26 @@ describe('get daily from postgresql',function(){
                              return null
                          }
                         ,function(task,cb){
-                             var connection_string = "pg://"
-                                                   + task.postgresql.auth.username+":"
-                                                   + task.postgresql.auth.password+"@"
-                                                   + task.postgresql.host+":"
-                                                   + task.postgresql.port+"/"
-                                                   + task.postgresql.detector_display_db
-                             pg.connect(connection_string
+                            var dbname = task.postgresql.detector_display_db
+                            var host = task.postgresql.host || '127.0.0.1';
+                            var port = task.postgresql.port || 5432;
+                            var username = task.postgresql.auth.username
+                            var password = task.postgresql.auth.password
+                            var connectionString = "pg://"+username+"@"+host+":"+port+"/"+dbname;
+                            if(password !== undefined){
+                                connectionString = "pg://"+username+":"+password+"@"+host+":"+port+"/"+dbname;
+                            }
+                            pg.connect(connectionString
                                        ,component_query(task,cb)
-                                       )
-                             return null
-                         }]
+                                      )
+                            return null
+                        }]
                        ,function(e,r){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
                             r.should.have.property('components')
-                            r.features.should.have.lengthOf(365  +366 + 365)
+                            r.features.should.have.lengthOf(365)
                             r.components.should.have.lengthOf(4)
                             return done()
                         })
@@ -58,23 +61,26 @@ describe('get daily from postgresql',function(){
                              return null
                          }
                         ,function(task,cb){
-                             var connection_string = "pg://"
-                                                   + task.postgresql.auth.username+":"
-                                                   + task.postgresql.auth.password+"@"
-                                                   + task.postgresql.host+":"
-                                                   + task.postgresql.port+"/"
-                                                   + task.postgresql.detector_display_db
-                             pg.connect(connection_string
+                            var dbname = task.postgresql.detector_display_db
+                            var host = task.postgresql.host || '127.0.0.1';
+                            var port = task.postgresql.port || 5432;
+                            var username = task.postgresql.auth.username
+                            var password = task.postgresql.auth.password
+                            var connectionString = "pg://"+username+"@"+host+":"+port+"/"+dbname;
+                            if(password !== undefined){
+                                connectionString = "pg://"+username+":"+password+"@"+host+":"+port+"/"+dbname;
+                            }
+                            pg.connect(connectionString
                                        ,component_query(task,cb)
-                                       )
-                             return null
+                                      )
+                            return null
                          }]
                        ,function(e,r){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
                             r.should.have.property('components')
-                            r.features.should.have.lengthOf(365  +366 + 365)
+                            r.features.should.have.lengthOf(365)
                             r.components.should.have.lengthOf(4)
                             return done()
                         })
@@ -94,24 +100,27 @@ describe('get daily from postgresql',function(){
                              return null
                          }
                         ,function(task,cb){
-                             var connection_string = "pg://"
-                                                   + task.postgresql.auth.username+":"
-                                                   + task.postgresql.auth.password+"@"
-                                                   + task.postgresql.host+":"
-                                                   + task.postgresql.port+"/"
-                                                   + task.postgresql.detector_display_db
-                             pg.connect(connection_string
+                            var dbname = task.postgresql.detector_display_db
+                            var host = task.postgresql.host || '127.0.0.1';
+                            var port = task.postgresql.port || 5432;
+                            var username = task.postgresql.auth.username
+                            var password = task.postgresql.auth.password
+                            var connectionString = "pg://"+username+"@"+host+":"+port+"/"+dbname;
+                            if(password !== undefined){
+                                connectionString = "pg://"+username+":"+password+"@"+host+":"+port+"/"+dbname;
+                            }
+                            pg.connect(connectionString
                                        ,component_query(task,cb)
-                                       )
-                             return null
+                                      )
+                            return null
                          }]
                        ,function(e,r){
                             should.not.exist(e)
                             should.exist(r)
                             r.should.have.property('features')
                             r.should.have.property('components')
-                            r.features.should.have.lengthOf(365  +366 + 365)
-                            r.components.should.have.lengthOf(5)
+                            r.features.should.have.lengthOf(365)
+                            r.components.should.have.lengthOf(3)
                             return done()
                         })
         return null
